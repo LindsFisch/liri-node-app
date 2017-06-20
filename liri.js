@@ -1,31 +1,34 @@
 //get key data for twitter
-var key = require("./keys.js");
+var client = require("./keys.js");
 
 
 var Twitter = require('twitter');
 var request = require('request');
-var Spotify = require('node-spotify-api');
+var spotify = require('node-spotify-api');
 
 var options = {
 	mytweets: function() {
 		console.log("tweet");
-		key.stream('statuses/filter', {track: 'twitter'},  function(stream) {
-  			stream.on('data', function(tweet) {
-    			console.log(tweet.text);
-  		});
-
-  			stream.on('error', function(error) {
-    			console.log(error);
- 		 	});
+		var twitter = client.twitterKeys;
+		var params = {screen_name: 'lmanderson89'};
+		twitter.get('statuses/user_timeline', params, function(error, tweets, response) {
+  			if (!error) {
+    			console.log(tweets);
+  			}	
 		});
-
 	},
-	spotifyThisSong: function() {
-		console.log("spotify");
-
+	spotifyThisSong: function(songName) {
+		//var spotify = client.spotifyKeys;
+		console.log("spotify " + songName);
+		spotify.search({ type: 'track', query: songName }, function(err, data) {
+  			if (err) {
+    			return console.log('Error occurred: ' + err);
+  			} 
+			console.log(data); 
+		});
 	},
-	movieThis: function() {
-		console.log("movie");
+	movieThis: function(movieName) {
+		console.log("movie " + movieName);
 
 	},
 	doWhatItSays: function() {
@@ -34,11 +37,23 @@ var options = {
 }
 
 //valuating userInput into console
-if (process.argv[2] === "my-tweets" || process.argv[2] === "spotify-this-song" || process.argv[2] === "movie-this" || process.argv[2] === "do-what-it-says") {
-	var convert = process.argv[2].split('-').join('');
-	console.log(convert);
-	options.convert;
-} else {
-	console.log("Please choose a valid option");
-}
+	switch (process.argv[2]) {
+		case "my-tweets":
+			options.mytweets();
+			break;
+		case "spotify-this-song":
+			var songName = process.argv[3];
+			options.spotifyThisSong(songName);
+			break;
+		case "movie-this":
+			var movieName = process.argv[3];
+			options.movieThis(movieName);
+			break;
+		case "do-what-it-says":
+			options.doWhatItSays();
+			break;	
+		default:
+		console.log("Please choose a valid option");
+			break;
+	}
 
