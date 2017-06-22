@@ -12,7 +12,6 @@ var spotifyClient = new Spotify(keys.spotifyKeys);
 
 var options = {
 	mytweets: function() {
-		console.log("tweet");
 		var params = {screen_name: 'lmanderson89'};
 		twitterClient.get('statuses/user_timeline', params, function(error, tweets, response) {
   			if (!error) {
@@ -27,7 +26,6 @@ var options = {
 		});
 	},
 	spotifyThisSong: function(songName) {
-		console.log("spotify " + songName);
 		spotifyClient.search({ type: 'track', query: songName }, function(err, data) {
   			if (err) {
     			return console.log('Error occurred: ' + err);
@@ -44,13 +42,23 @@ var options = {
 		});
 	},
 	movieThis: function(movieName) {
-		console.log("movie " + movieName);
 		request("http://www.omdbapi.com/?t=" + movieName + "&apikey=40e9cece", function (error, response, body){
 			if (!error && response.statusCode === 200) {
 				var replace = JSON.parse(body);
 				console.log("\n-----------------------\n");
 				console.log("Title: " + replace.Title + "\nYear: " + replace.Year + "\nIMDB Rating: " + replace.imdbRating +"\nCountry: " + replace.Country + "\nLanguage: " + replace.Language + "\nPlot: " + replace.Plot + "\nActors: " + replace.Actors + "\nRotten Tomatoes Rating: " + replace.Ratings[1].Value);
 				console.log("\n-----------------------\n");
+
+				//log to file
+				fs.appendFile("log.txt", "Title: " + replace.Title);
+				fs.appendFile("log.txt", "Year: " + replace.Year);
+				fs.appendFile("log.txt", "IMDB Rating: " + replace.imdbRating);
+				fs.appendFile("log.txt", "Country: " + replace.Country);
+				fs.appendFile("log.txt", "Language: " + replace.Language);
+				fs.appendFile("log.txt", "Plot: " + replace.Plot);
+				fs.appendFile("log.txt", "Actors: " + replace.Actors);
+				fs.appendFile("log.txt", "Rotten Tomatoes Rating: " + replace.Ratings[1].Value);
+
   			} else {
 				console.log("There was an error!");
 			}
@@ -60,8 +68,36 @@ var options = {
 		fs.readFile("random.txt", "utf8", function(err, data) {
 			console.log(data);
 			var dataArr = data.split(",");
-			console.log(dataArr);
-			return dataArr[0];
+			
+		switch(dataArr[0]) {
+			case "my-tweets":
+				options.mytweets();
+				break;
+			case "spotify-this-song":
+				songName = dataArr[1];
+			//insert default song if no user input
+				if (songName) {
+					options.spotifyThisSong(songName);
+				} else {
+					options.spotifyThisSong("The+Sign");
+				}
+				break;
+			case "movie-this":
+				movieName = dataArr[1];
+			//insert default movie if no user input
+				if (movieName) {
+					options.movieThis(movieName);
+				} else {
+					options.movieThis("Mr.+Nobody");
+				}
+				break; 
+			default:
+				console.log("There was an error");
+			break;
+
+
+			}
+
 		})
 	},
 }
