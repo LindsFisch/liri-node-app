@@ -43,10 +43,11 @@ var options = {
 	},
 	movieThis: function(movieName) {
 		request("http://www.omdbapi.com/?t=" + movieName + "&apikey=40e9cece", function (error, response, body){
+			if (error) throw error;
 			if (!error && response.statusCode === 200) {
 				var replace = JSON.parse(body);
 				console.log("\n-----------------------\n");
-				console.log("Title: " + replace.Title + "\nYear: " + replace.Year + "\nIMDB Rating: " + replace.imdbRating +"\nCountry: " + replace.Country + "\nLanguage: " + replace.Language + "\nPlot: " + replace.Plot + "\nActors: " + replace.Actors + "\nRotten Tomatoes Rating: " + replace.Ratings[1].Value);
+				console.log("Title: " + replace.Title + "\nYear: " + replace.Year + "\nIMDB Rating: " + replace.imdbRating +"\nCountry: " + replace.Country + "\nLanguage: " + replace.Language + "\nPlot: " + replace.Plot + "\nActors: " + replace.Actors + "\nRotten Tomatoes Rating: " + replace.Ratings[0].Value);
 				console.log("\n-----------------------\n");
 
 				//log to file
@@ -57,7 +58,7 @@ var options = {
 				fs.appendFile("log.txt", "Language: " + replace.Language);
 				fs.appendFile("log.txt", "Plot: " + replace.Plot);
 				fs.appendFile("log.txt", "Actors: " + replace.Actors);
-				fs.appendFile("log.txt", "Rotten Tomatoes Rating: " + replace.Ratings[1].Value);
+				fs.appendFile("log.txt", "Rotten Tomatoes Rating: " + replace.Ratings[0].Value);
 
   			} else {
 				console.log("There was an error!");
