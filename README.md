@@ -2,9 +2,7 @@
 
 ### Overview
 
-LIRI is like iPhone's SIRI. However, while SIRI is a Speech Interpretation and Recognition Interface, LIRI is a Language Interpretation and Recognition Interface. LIRI will be a command line node app that takes in parameters and gives back data. To receive data, the LIRI sends requests to the Twitter, Spotify and OMDB APIs and uses node packages to do so. 
-
-### Specifications
+LIRI is a command line node app that takes in parameters and gives back data. To receive data, the LIRI sends requests to the Twitter, Spotify and OMDB APIs and uses node packages to do so. Using:
 
 1. `node liri.js my-tweets`
 
@@ -38,14 +36,6 @@ LIRI is like iPhone's SIRI. However, while SIRI is a Speech Interpretation and R
        * Actors in the movie.
        * Rotten Tomatoes URL.
      ```
-
-   * If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.'
-     
-     * If you haven't watched "Mr. Nobody," then you should: <http://www.imdb.com/title/tt0485947/>
-     
-     * It's on Netflix!
-   
-   * You'll use the request package to retrieve data from the OMDB API. Like all of the in-class activities, the OMDB API requires an API key. You may use `40e9cece`.
 
 4. `node liri.js do-what-it-says`
    
